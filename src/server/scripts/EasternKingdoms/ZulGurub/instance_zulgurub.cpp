@@ -32,8 +32,7 @@ DoorData const doorData[] =
 
 class instance_zulgurub : public InstanceMapScript
 {
-    public:
-        instance_zulgurub() : InstanceMapScript(ZGScriptName, 859) { }
+    public: instance_zulgurub(): InstanceMapScript(ZGScriptName, 309) { }
 
         struct instance_zulgurub_InstanceMapScript : public InstanceScript
         {

@@ -261,6 +261,7 @@ public:
     static bool HandleGroupListCommand(ChatHandler* handler, char const* args)
     {
         Player* playerTarget;
+        uint32 phase = 0;
         uint64 guidTarget;
         std::string nameTarget;
 
