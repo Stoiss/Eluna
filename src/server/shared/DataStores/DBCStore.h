@@ -80,12 +80,37 @@ class DBCStorage
 
         T const* LookupEntry(uint32 id) const
         {
+            if(loaded)
+            {
+                typename std::map<uint32, T const*>::const_iterator it = data.find(id);
+                if (it == data.end())
+                    return NULL;
+                return it->second;
+            }
             return (id >= nCount) ? NULL : indexTable.asT[id];
         }
 
         uint32  GetNumRows() const { return nCount; }
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
+
+        void SetEntry(uint32 id, T* t) // Cryptic they say..
+        {
+            if(!loaded)
+            {
+                for (uint32 i = 0; i < GetNumRows(); ++i)
+                {
+                    T const* node = LookupEntry(i);
+                    if (!node)
+                        continue;
+                    data[i] = node;
+                }
+                loaded = true;
+            }
+            if (id > nCount)
+                nCount = id+1;
+            data[id] = t;
+        }
 
         bool Load(char const* fn, SqlDbc* sql)
         {
@@ -263,6 +288,12 @@ class DBCStorage
             if (!indexTable.asT)
                 return;
 
+            if (loaded)
+            {
+                data.clear();
+                loaded = false;
+            }
+
             delete[] reinterpret_cast<char*>(indexTable.asT);
             indexTable.asT = NULL;
             delete[] reinterpret_cast<char*>(dataTable);
@@ -290,6 +321,8 @@ class DBCStorage
         indexTable;
 
         T* dataTable;
+        std::map<uint32, T const*> data;
+        bool loaded;
         StringPoolList stringPoolList;
 };
 
