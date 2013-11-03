@@ -41,7 +41,8 @@ enum Events
 
 class boss_kilnara : public CreatureScript
 {
-    public: boss_kilnara() : CreatureScript("boss_gahzranka") { }
+    public:
+        boss_kilnara() : CreatureScript("boss_kilnara") { }
 
         struct boss_kilnaraAI : public BossAI
         {
